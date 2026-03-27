@@ -1,0 +1,20 @@
+version: "2"
+services:
+  todoapp:
+    build: ./web-frontend
+    ports:
+     - "3000"
+    depends_on:
+     - redis-master
+     - redis-slave
+  redis-slave:
+    build: ./redis-slave
+    depends_on:
+     - redis-master
+  redis-master:
+    build: ./redis-master
+
+networks:
+  default:
+    external:
+      name: todoapp_network

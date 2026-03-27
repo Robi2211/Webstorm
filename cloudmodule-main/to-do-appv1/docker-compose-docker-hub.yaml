@@ -1,0 +1,16 @@
+version: "3"
+services:
+  todoapp:
+    image: staubth/todo-app:v1    
+    ports:
+     - "3000"
+    depends_on:
+     - redis-master
+     - redis-slave
+  redis-slave:
+    image: staubth/redis-slave:v1
+    depends_on:
+     - redis-master
+  redis-master:
+    image: staubth/redis-master:v1
+

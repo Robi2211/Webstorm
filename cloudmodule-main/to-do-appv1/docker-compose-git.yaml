@@ -1,0 +1,15 @@
+version: "3"
+services:
+  todoapp:
+    image: git-registry.gibb.ch/thomas.staub/cloudmodule/todo-app:v1
+    ports:
+     - "3000"
+    depends_on:
+     - redis-master
+     - redis-slave
+  redis-slave:
+    image: git-registry.gibb.ch/thomas.staub/cloudmodule/redis-slave:v1
+    depends_on:
+     - redis-master
+  redis-master:
+    image: git-registry.gibb.ch/thomas.staub/cloudmodule/redis-master:v1

@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app   ## name of the namespace
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: redis-master
+  namespace: my-app
+  labels:
+    name: redis-master
+spec:
+  replicas: 1
+  selector:
+    name: redis-master
+  template:
+    metadata:
+      labels:
+        name: redis-master
+    spec:
+      containers:
+      - name: redis-master
+        image: staubth/redis-master:v1
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: my-app
+  name: redis-master
+  labels:
+    name: redis-master
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+  selector:
+    name: redis-master
+
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  namespace: my-app
+  name: redis-slave
+  labels:
+    name: redis-slave
+spec:
+  replicas: 2
+  selector:
+    name: redis-slave
+  template:
+    metadata:
+      labels:
+        name: redis-slave
+    spec:
+      containers:
+      - name: slave
+        image: staubth/redis-slave:v1
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: my-app
+  name: redis-slave
+  labels:
+    name: redis-slave
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+  selector:
+    name: redis-slave
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-app
+  name: todo-app-deployment
+  labels:
+    name: todo-app
+    app: todo-app
+spec:
+  replicas: 3
+  selector:
+   matchLabels:
+      app: todo-app
+  template:
+    metadata:
+      labels:
+        app: todo-app
+    spec:
+      containers:
+      - name: todo-app
+        image: staubth/todo-app:v1
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: my-app
+  name: todo-app-service
+  labels:
+    name: todo-app
+spec:
+  selector:
+    app: todo-app
+  type: LoadBalancer
+  # loadBalancerIP is optional. MetalLB will automatically allocate an IP
+  # from its pool if not specified. You can also specify one manually.
+  # loadBalancerIP: x.y.z.a
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 3000
