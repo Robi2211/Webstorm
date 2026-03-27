@@ -1,7 +1,7 @@
-# Todo-App v1 (Podman)
+# To-Do-App v1 (Podman)
 
 ## Ziel
-Die Todo-App aus Teil 1 mit Podman starten, anschließend als Pod zusammenfassen und optional nach Kubernetes übertragen.
+Die To-Do-App aus Teil 1 mit Podman starten, anschließend als Pod zusammenfassen und optional nach Kubernetes übertragen.
 
 ## 1) Start mit Podman (ohne Pod)
 Im Verzeichnis `to-do-appv1` ausführen:
