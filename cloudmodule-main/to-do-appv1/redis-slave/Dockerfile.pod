@@ -1,0 +1,5 @@
+FROM redis:alpine3.16
+
+COPY start-redis-slave-pod.sh /start-redis-slave-pod.sh
+RUN chmod +x /start-redis-slave-pod.sh
+CMD /start-redis-slave-pod.sh
