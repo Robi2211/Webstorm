@@ -1,7 +1,33 @@
-# To-Do-App v1 (Podman)
+# Todo App v1 (Docker/Podman)
 
 ## Ziel
-Die To-Do-App aus Teil 1 mit Podman starten, anschließend als Pod zusammenfassen und optional nach Kubernetes übertragen.
+Die To-Do-App v1 mit Podman starten, anschließend als Pod zusammenfassen und optional nach Kubernetes übertragen.
+
+## Docker-Compose Fehlerbehebung (Windows)
+Wenn du unter Windows diesen Befehl verwendest:
+
+```cmd
+docker compose -f https://gitlab.com/thomas-staub/cloudmodules/m169/demobeispiele/to-do-appv1/-/raw/main/docker-compose-git.yaml up -d
+```
+
+kann der Fehler `CreateFile ... https:\...\.env` auftreten. Ursache: Compose behandelt die URL als lokalen Pfad. Das gilt sowohl für `docker compose` als auch für das ältere `docker-compose`.
+
+Verwende stattdessen eine lokale Compose-Datei aus diesem Repository:
+
+`<workspace-root>` muss durch den tatsächlichen lokalen Ordner ersetzt werden, der `cloudmodule-main` enthält (z. B. `C:\Users\username\Projects`).
+Beispiel für den vollständigen Pfad: `C:\Users\username\Projects\cloudmodule-main\to-do-appv1`.
+
+```cmd
+cd <workspace-root>\cloudmodule-main\to-do-appv1
+docker compose -f docker-compose-git.yaml up -d
+```
+
+Alternativ (ohne GitLab-Registry-Login) direkt Docker-Hub-Images:
+
+```cmd
+cd <workspace-root>\cloudmodule-main\to-do-appv1
+docker compose -f docker-compose-docker-hub.yaml up -d
+```
 
 ## 1) Start mit Podman (ohne Pod)
 Im Verzeichnis `to-do-appv1` ausführen:
